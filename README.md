@@ -1,5 +1,14 @@
 # muse-wechat-bot：让 Muse 住进你的微信
 
+<p align="center">
+  <img src="banner.svg" width="100%" alt="muse-wechat-bot — 让 Muse 住进你的微信">
+</p>
+
+![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python&logoColor=white)
+![WeChat](https://img.shields.io/badge/Platform-WeChat-07C160?logo=wechat&logoColor=white)
+![Protocol](https://img.shields.io/badge/Protocol-Tencent_iLink-07C160)
+![Idle cost](https://img.shields.io/badge/Idle_cost-0_tokens-brightgreen)
+
 **中文** | [English](README.en.md)
 
 一个自包含的「技能文件」，能把你自己的 Muse 通过腾讯官方 iLink Bot 接口接进微信：
@@ -40,6 +49,16 @@
 - **（可选）微信聊天日报**：每晚把当天在微信里聊的内容汇总成一页日报，
   方便回看，技能文件里留好了实现要点。
 
+| 能力一览 | 你 → Muse | Muse → 你 |
+| --- | --- | --- |
+| 文字消息 | ✅ | ✅ |
+| 图片 | ✅ 发图给它看 | ✅ 生成 / 发送图片 |
+| 视频 | ✅ 落盘处理 | ✅ 发送视频 |
+| 文件 | ✅ | ✅ |
+| 语音 | ✅ 自动转文字 | —（以文字回复） |
+| 文章链接 | ✅ 读原文并总结 | — |
+| 主动推送 | — | ✅（24 小时会话窗口内） |
+
 ## 它不是什么（先把预期对齐）
 
 - **不是群机器人**：只服务扫码绑定的你本人，只处理你的私聊；群聊和陌生人
@@ -56,13 +75,14 @@
 
 ## 工作原理（30 秒版）
 
-```
-你的微信 ⇄ 腾讯官方 iLink 接口 ⇄ bridge.py（一条 Python 小桥，常驻守护）
-                                  ⇄ 本地队列（SQLite）
-                                  ⇄ 事件钩子：每 5 秒只看一眼本地队列
-                                     ——没消息，什么都不发生（零成本）；
-                                     ——有消息，才唤醒 Muse 本人来处理
-                                  ⇄ Muse 回复/办事 → 经桥发回微信
+```mermaid
+flowchart LR
+    W["你的微信"] <-->|"官方 iLink 接口"| B["bridge.py 守护进程<br/>长轮询收消息 · 媒体落盘"]
+    B --> Q[("SQLite 本地队列")]
+    Q --> H["本地钩子<br/>每 5 秒瞄一眼"]
+    H -->|"有新消息才唤醒"| M["Muse 本人<br/>同一套记忆与工具"]
+    M -->|"回复 / 办事结果"| B
+    H -.->|"没消息：不唤醒 · 零成本"| H
 ```
 
 三个关键设计，也是这个 v2 版的立身之本：
@@ -83,6 +103,19 @@
 **前提**：一个能正常使用的 Muse；一台长期在线的机器（Muse 自带的云端
 运行环境就可以，自己的 VPS 更好）；手机微信版本需支持 ClawBot 插件
 （iLink Bot 通道由腾讯于 2026 年 3 月开放）。
+
+**扫码之前，先在微信里把 ClawBot 插件打开**（只在第一次绑定时需要，以后不用管）：
+
+1. 打开微信 →「我」→「设置」→「插件」；
+2. 在插件列表里找到「微信ClawBot」，点它右边的「详情」；
+3. 进入详情页，点「开始扫一扫」，就可以扫 Muse 发给你的二维码了，
+   扫完在手机上确认授权即绑定完成。
+
+<p align="center">
+  <img src="Screenshot_20261114_012833_com_tencent_mm_WxaLiteAppLiteUI.jpg" width="300" alt="微信插件列表里的微信ClawBot">
+  <img src="Screenshot_20261114_012825_com_tencent_mm_WxaLiteAppLiteUI.jpg" width="300" alt="微信ClawBot详情页，点开始扫一扫">
+</p>
+<p align="center"><em>左：在「设置 → 插件」里找到微信ClawBot，点「详情」　｜　右：在详情页点「开始扫一扫」</em></p>
 
 1. **拿到技能文件**：下载本仓库的
    [`muse-wechat-bot-v2.md`](muse-wechat-bot-v2.md)（英文版：
@@ -111,8 +144,8 @@
 | 0. 选机器 | 确认桥跑在哪台长期在线的机器上（VPS 最优，Muse 云环境次之，本机最差） | 无 |
 | 1. 环境检查 | 检查 Python 3.8+，安装依赖 `requests`、`qrcode`、`pycryptodome`；测试接口连通性 | 无 |
 | 2. 部署桥 | 把技能文件附录里的 `bridge.py` 源码原样落盘到 `~/wechat-bot/` 并通过语法校验 | 无 |
-| 3. 扫码绑定 | Muse 取二维码、本地渲染成图片发给你；后台轮询授权状态；成功后 token 落盘 `~/wechat-bot/auth.json`（权限 600） | **扫码 + 手机确认**（可能要报一次数字配对码） |
-| 4. 建立会话 | Muse 请你在微信里先发一句话，验证能收能回 | **在微信里发任意一句话** |
+| 3. 扫码绑定 | Muse 取二维码、本地渲染成图片发给你；后台轮询授权状态；成功后 token 落盘 `~/wechat-bot/auth.json`（权限 600） | 先在微信「设置 → 插件」里打开微信ClawBot（只需第一次，图示见快速开始）；再**扫码 + 手机确认**（可能要报一次数字配对码） |
+| 4. 建立会话 | Muse 请你在微信里先发一句话，验证能收能回 | **在微信里发任意一句话**（这条消息同时会刷新主动推送的 24 小时窗口） |
 | 5. 守护与钩子 | 用 `launch.sh` 启动守护进程（长轮询收消息、媒体落盘、入队）；注册每 5 秒的本地事件钩子并写入唤醒提示词 | 无 |
 | 6. 验收 | `bridge.py status` 显示守护存活；微信里实测一轮文字、一张图片的收发 | 瞄一眼微信确认收到 |
 
@@ -178,8 +211,13 @@
 ├── muse-wechat-bot-v2.md        # 技能文件（中文）：部署手册 + bridge.py 全部源码 + 提示词模板
 ├── muse-wechat-bot-v2.en.md     # Skill file (English): same content, code appendices identical
 ├── IMG_20261114_003623.jpg      # 实测截图：部署完成后的微信聊天
-└── Screenshot_20261114_004955_com_facebook_aura_AuraMainActivity_edit_2345336915878447.jpg
+├── Screenshot_20261114_004955_com_facebook_aura_AuraMainActivity_edit_2345336915878447.jpg
                                  # 实测截图：扫码部署过程（二维码已打码）
+├── Screenshot_20261114_012833_com_tencent_mm_WxaLiteAppLiteUI.jpg
+                                 # 步骤图：插件列表里的微信ClawBot
+├── Screenshot_20261114_012825_com_tencent_mm_WxaLiteAppLiteUI.jpg
+                                 # 步骤图：ClawBot 详情页（开始扫一扫）
+└── banner.svg                   # 本页顶部横幅
 ```
 
 技能文件是**单文件自包含**的：你的 Muse 需要的一切都在里面，不需要再

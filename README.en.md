@@ -1,5 +1,14 @@
 # muse-wechat-bot: Move Muse Into Your WeChat
 
+<p align="center">
+  <img src="banner.svg" width="100%" alt="muse-wechat-bot — Chat with Muse inside WeChat">
+</p>
+
+![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python&logoColor=white)
+![WeChat](https://img.shields.io/badge/Platform-WeChat-07C160?logo=wechat&logoColor=white)
+![Protocol](https://img.shields.io/badge/Protocol-Tencent_iLink-07C160)
+![Idle cost](https://img.shields.io/badge/Idle_cost-0_tokens-brightgreen)
+
 [中文](README.md) | **English**
 
 A single self-contained "skill file" that connects your own Muse to WeChat
@@ -50,6 +59,16 @@ Once bound, right inside WeChat you can:
   conversation is summarized into a one-page digest for easy review; the
   skill file includes the implementation notes.
 
+| Capability matrix | You → Muse | Muse → You |
+| --- | --- | --- |
+| Text messages | ✅ | ✅ |
+| Images | ✅ send for it to see | ✅ generate / send images |
+| Video | ✅ saved & processed | ✅ send video |
+| Files | ✅ | ✅ |
+| Voice | ✅ auto-transcribed | — (replies in text) |
+| Article links | ✅ reads & summarizes the original | — |
+| Proactive push | — | ✅ (within the 24 h session window) |
+
 ## What it is not (expectations first)
 
 - **Not a group bot.** It serves only the person who scanned the QR code and
@@ -71,13 +90,14 @@ Once bound, right inside WeChat you can:
 
 ## How it works (the 30-second version)
 
-```
-Your WeChat ⇄ Tencent's official iLink API ⇄ bridge.py (a small Python bridge, resident daemon)
-                                              ⇄ local queue (SQLite)
-                                              ⇄ event hook: peeks at the local queue every 5 s
-                                                 — nothing new: nothing happens (zero cost)
-                                                 — something new: Muse itself is woken to handle it
-                                              ⇄ Muse replies / does the task → sent back via the bridge
+```mermaid
+flowchart LR
+    W["Your WeChat"] <-->|"official iLink API"| B["bridge.py daemon<br/>long-polling · media saving"]
+    B --> Q[("SQLite local queue")]
+    Q --> H["Local hook<br/>peeks every 5 s"]
+    H -->|"wakes only on new messages"| M["Muse itself<br/>same memory & tools"]
+    M -->|"replies / task results"| B
+    H -.->|"nothing new: no wake · zero cost"| H
 ```
 
 Three design decisions are the soul of this v2:
@@ -102,6 +122,19 @@ Three design decisions are the soul of this v2:
 **Prerequisites**: a working Muse; an always-on machine (Muse's own cloud
 runtime works, your own VPS is better); a WeChat version that supports the
 ClawBot plugin (the iLink Bot channel was opened by Tencent in March 2026).
+
+**Before scanning, enable the ClawBot plugin in WeChat** (first binding only):
+
+1. Open WeChat → Me → Settings → Plugins;
+2. Find "WeChat ClawBot" in the plugin list and tap **Details**;
+3. On the detail page, tap **Start scanning** — then scan the QR code Muse
+   sends you and confirm the authorization on your phone.
+
+<p align="center">
+  <img src="Screenshot_20261114_012833_com_tencent_mm_WxaLiteAppLiteUI.jpg" width="300" alt="WeChat ClawBot in the Plugins list">
+  <img src="Screenshot_20261114_012825_com_tencent_mm_WxaLiteAppLiteUI.jpg" width="300" alt="WeChat ClawBot detail page, tap Start scanning">
+</p>
+<p align="center"><em>Left: find WeChat ClawBot under Settings → Plugins and tap Details　|　Right: tap "Start scanning" on the detail page</em></p>
 
 1. **Get the skill file.** Download
    [`muse-wechat-bot-v2.en.md`](muse-wechat-bot-v2.en.md) from this repo
@@ -134,8 +167,8 @@ you know what to expect and what to check.
 | 0. Machine | Confirm which always-on machine hosts the bridge (VPS best, Muse's cloud runtime next, your own computer last) | Nothing |
 | 1. Environment | Check Python 3.8+; install `requests`, `qrcode`, `pycryptodome`; test API connectivity | Nothing |
 | 2. Deploy the bridge | The skill file's appendix source is written verbatim to `~/wechat-bot/bridge.py` and syntax-checked | Nothing |
-| 3. QR binding | Muse fetches the QR code, renders it locally to an image and sends it to you; polls authorization in the background; on success the token is stored in `~/wechat-bot/auth.json` (mode 600) | **Scan + confirm on your phone** (and report a pairing code if asked) |
-| 4. Open the session | Muse asks you to send the first WeChat message; verifies receive + reply | **Send any message in WeChat** |
+| 3. QR binding | Muse fetches the QR code, renders it locally to an image and sends it to you; polls authorization in the background; on success the token is stored in `~/wechat-bot/auth.json` (mode 600) | First enable WeChat ClawBot under WeChat Settings → Plugins (first time only; illustrated in Quick start); then **scan + confirm on your phone** (and report a pairing code if asked) |
+| 4. Open the session | Muse asks you to send the first WeChat message; verifies receive + reply | **Send any message in WeChat** (it also refreshes the 24-hour proactive-send window) |
 | 5. Daemon + hook | `launch.sh` starts the daemon (long-polling, media saving, queueing); the 5-second local event hook is registered with the wake prompt | Nothing |
 | 6. Acceptance | `bridge.py status` shows the daemon alive; a live round-trip test of text and one image in WeChat | Glance at WeChat to confirm |
 
@@ -213,8 +246,13 @@ it to any repository, never paste it into a chat.
 ├── muse-wechat-bot-v2.md        # Skill file (Chinese): deployment manual + full bridge.py source + prompt templates
 ├── muse-wechat-bot-v2.en.md     # Skill file (English): same content, code appendices identical
 ├── IMG_20261114_003623.jpg      # Screenshot: chatting in WeChat after deployment
-└── Screenshot_20261114_004955_com_facebook_aura_AuraMainActivity_edit_2345336915878447.jpg
+├── Screenshot_20261114_004955_com_facebook_aura_AuraMainActivity_edit_2345336915878447.jpg
                                  # Screenshot: the QR-scan deployment (QR code scribbled out)
+├── Screenshot_20261114_012833_com_tencent_mm_WxaLiteAppLiteUI.jpg
+                                 # Step shot: WeChat ClawBot in the Plugins list
+├── Screenshot_20261114_012825_com_tencent_mm_WxaLiteAppLiteUI.jpg
+                                 # Step shot: ClawBot detail page (Start scanning)
+└── banner.svg                   # The banner at the top of this page
 ```
 
 The skill file is **single-file and self-contained**: everything your Muse

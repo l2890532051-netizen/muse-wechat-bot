@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="380" viewBox="0 0 1200 380" role="img" aria-label="muse-wechat-bot — 让 Muse 住进你的微信">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d2137"/>
+      <stop offset="0.55" stop-color="#0e3a34"/>
+      <stop offset="1" stop-color="#0a5c38"/>
+    </linearGradient>
+    <linearGradient id="bubbleG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#95ec69"/>
+      <stop offset="1" stop-color="#7ed957"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="380" fill="url(#bg)"/>
+  <circle cx="1080" cy="40" r="150" fill="#07c160" opacity="0.14"/>
+  <circle cx="90" cy="360" r="120" fill="#2f7fd0" opacity="0.16"/>
+
+  <!-- title block -->
+  <text x="70" y="128" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="62" font-weight="700" fill="#ffffff">muse-wechat-bot</text>
+  <text x="72" y="188" font-family="'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif" font-size="36" font-weight="600" fill="#d9fbe8">让 Muse 住进你的微信</text>
+  <text x="72" y="228" font-family="system-ui, 'Segoe UI', Roboto, sans-serif" font-size="22" fill="#a9c8bb">Chat with your Muse inside WeChat — same memory, same skills.</text>
+
+  <!-- pills -->
+  <g font-family="'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif" font-size="19" fill="#eafff3">
+    <rect x="70" y="268" width="196" height="42" rx="21" fill="#ffffff" opacity="0.12"/>
+    <text x="92" y="296">腾讯官方 iLink 接口</text>
+    <rect x="282" y="268" width="158" height="42" rx="21" fill="#ffffff" opacity="0.12"/>
+    <text x="304" y="296">零空转成本</text>
+    <rect x="456" y="268" width="158" height="42" rx="21" fill="#ffffff" opacity="0.12"/>
+    <text x="478" y="296">双向记忆互通</text>
+    <rect x="630" y="268" width="186" height="42" rx="21" fill="#ffffff" opacity="0.12"/>
+    <text x="652" y="296">图片 · 视频 · 文件</text>
+  </g>
+
+  <!-- phone mock -->
+  <g>
+    <rect x="892" y="46" width="212" height="300" rx="30" fill="#11181d" stroke="#3a4a52" stroke-width="2"/>
+    <rect x="904" y="76" width="188" height="228" rx="10" fill="#ededed"/>
+    <rect x="966" y="58" width="64" height="10" rx="5" fill="#3a4a52"/>
+    <!-- chat bubbles -->
+    <rect x="916" y="92" width="104" height="30" rx="8" fill="#ffffff"/>
+    <rect x="978" y="134" width="102" height="30" rx="8" fill="url(#bubbleG)"/>
+    <rect x="916" y="176" width="122" height="30" rx="8" fill="#ffffff"/>
+    <rect x="952" y="218" width="128" height="30" rx="8" fill="url(#bubbleG)"/>
+    <rect x="916" y="260" width="88" height="30" rx="8" fill="#ffffff"/>
+    <!-- input bar -->
+    <rect x="912" y="312" width="140" height="20" rx="10" fill="#f7f7f7"/>
+    <circle cx="1072" cy="322" r="10" fill="#07c160"/>
+  </g>
+
+  <!-- robot cat badge -->
+  <g>
+    <polygon points="838,66 856,34 876,62" fill="#2f7fd0"/>
+    <polygon points="912,62 932,34 950,66" fill="#2f7fd0"/>
+    <circle cx="894" cy="96" r="52" fill="#2f7fd0"/>
+    <ellipse cx="894" cy="106" rx="38" ry="32" fill="#ffffff"/>
+    <circle cx="894" cy="94" r="6.5" fill="#e60012"/>
+    <circle cx="876" cy="88" r="4.5" fill="#222222"/>
+    <circle cx="912" cy="88" r="4.5" fill="#222222"/>
+    <path d="M 884 112 Q 894 118 904 112" stroke="#222222" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M 856 96 L 838 92 M 858 108 L 840 110 M 932 96 L 950 92 M 930 108 L 948 110" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.85"/>
+    <rect x="868" y="140" width="52" height="12" rx="6" fill="#e60012"/>
+    <circle cx="894" cy="158" r="8" fill="#ffd83d" stroke="#c9a227" stroke-width="1.5"/>
+  </g>
+</svg>
