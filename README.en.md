@@ -15,6 +15,11 @@ you can keep talking to it in WeChat, hand it tasks, and get results back.
 > See [What v2 changed](#what-v2-changed) for the differences and
 > [Credits & sources](#credits--sources) for full attribution.
 
+<p align="center">
+  <img src="IMG_20261114_003623.jpg" width="340" alt="Live test in WeChat: chatting with Muse and asking it to generate an image sent back into WeChat">
+</p>
+<p align="center"><em>Live after deployment: everyday chat, a connectivity test, and asking it to generate an image delivered straight into WeChat</em></p>
+
 ---
 
 ## What it can do
@@ -114,6 +119,11 @@ ClawBot plugin (the iLink Bot channel was opened by Tencent in March 2026).
 Start to finish is about 10 minutes when it goes smoothly, with under a
 minute of your own hands-on time.
 
+<p align="center">
+  <img src="Screenshot_20261114_004955_com_facebook_aura_AuraMainActivity_edit_2345336915878447.jpg" width="340" alt="Deployment in progress: Muse generates the QR code in the chat for the user to scan and bind">
+</p>
+<p align="center"><em>Deployment, live: say "start deploying" and Muse sends the QR code right into the chat — scan and confirm to bind (the QR code is scribbled out in this screenshot)</em></p>
+
 ## Deployment in detail (for those who want to see the moving parts)
 
 Every step below is performed by Muse automatically; this table exists so
@@ -201,7 +211,10 @@ it to any repository, never paste it into a chat.
 ├── README.md                    # Chinese README
 ├── README.en.md                 # This file
 ├── muse-wechat-bot-v2.md        # Skill file (Chinese): deployment manual + full bridge.py source + prompt templates
-└── muse-wechat-bot-v2.en.md     # Skill file (English): same content, code appendices identical
+├── muse-wechat-bot-v2.en.md     # Skill file (English): same content, code appendices identical
+├── IMG_20261114_003623.jpg      # Screenshot: chatting in WeChat after deployment
+└── Screenshot_20261114_004955_com_facebook_aura_AuraMainActivity_edit_2345336915878447.jpg
+                                 # Screenshot: the QR-scan deployment (QR code scribbled out)
 ```
 
 The skill file is **single-file and self-contained**: everything your Muse

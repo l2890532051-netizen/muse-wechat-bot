@@ -13,6 +13,11 @@
 > [与原版的差异](#与原版的差异v2-改了什么)。原作者与来源的完整说明见
 > [致谢与来源](#致谢与来源)。
 
+<p align="center">
+  <img src="IMG_20261114_003623.jpg" width="340" alt="在微信里和 Muse 聊天、让它生成图片发回微信的实测截图">
+</p>
+<p align="center"><em>部署完成后的微信实测：日常聊天、联通测试，以及让它生成图片直接发回微信里</em></p>
+
 ---
 
 ## 它能干什么
@@ -92,6 +97,11 @@
 
 整个过程顺利的话约 10 分钟，其中你动手的时间不超过 1 分钟。
 
+<p align="center">
+  <img src="Screenshot_20261114_004955_com_facebook_aura_AuraMainActivity_edit_2345336915878447.jpg" width="340" alt="部署过程实录：Muse 在聊天里生成二维码，用户扫码绑定">
+</p>
+<p align="center"><em>部署过程实录：说一句"开始部署"，Muse 就生成二维码发到聊天里，扫码确认即可绑定（图中二维码已打码处理）</em></p>
+
 ## 部署详细步骤（给想看明白的人）
 
 以下每一步都由 Muse 自动完成，这里写出来是让你心里有数、方便验收：
@@ -166,7 +176,10 @@
 ├── README.md                    # 本文件（中文说明）
 ├── README.en.md                 # English README
 ├── muse-wechat-bot-v2.md        # 技能文件（中文）：部署手册 + bridge.py 全部源码 + 提示词模板
-└── muse-wechat-bot-v2.en.md     # Skill file (English): same content, code appendices identical
+├── muse-wechat-bot-v2.en.md     # Skill file (English): same content, code appendices identical
+├── IMG_20261114_003623.jpg      # 实测截图：部署完成后的微信聊天
+└── Screenshot_20261114_004955_com_facebook_aura_AuraMainActivity_edit_2345336915878447.jpg
+                                 # 实测截图：扫码部署过程（二维码已打码）
 ```
 
 技能文件是**单文件自包含**的：你的 Muse 需要的一切都在里面，不需要再
