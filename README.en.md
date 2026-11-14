@@ -236,6 +236,15 @@ it to any repository, never paste it into a chat.
 - **It says "I can't send images"?** You're running the old bridge. v2
   implements image/video/file sending — ask Muse to upgrade `bridge.py`
   following the v2 skill file.
+- **WeChat shows "Cannot connect to OpenClaw" — is the bridge broken?**
+  Usually not. That notice comes from the ClawBot plugin itself: it judges
+  whether the backend is online by the server-side connection state, and
+  when the daemon briefly restarts (a recycled cloud VM, a network hiccup)
+  there is a gap of a few dozen seconds during which the plugin displays
+  it. Verifying is easy: send a message in WeChat — if you get a reply, it
+  was a false alarm. iLink messages queue on the server side and are
+  delivered once the bridge is back; nothing is lost. Only if messages go
+  unanswered for several minutes is it time to check the daemon.
 
 ## Repository layout
 

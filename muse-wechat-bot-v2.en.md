@@ -281,6 +281,7 @@ Until asked, default to urgent-only.
 | Daemon vanished | Machine reset or process reaped: the hook revives it on the next poll; check `bridge.log` for a traceback |
 | Every log line appears twice | The launcher's stdout redirect was touched: restore `/dev/null` |
 | `pkill -f` killed yourself | The pattern literal was also on your own command line: run kill and literal-path operations as two separate commands |
+| WeChat shows "cannot connect to OpenClaw" | Usually a false alarm: the plugin judges backend presence by the server-side connection state, and the tens-of-seconds gap while the daemon restarts (VM recycle, network jitter) triggers it; messages queue server-side and are not lost — have the user send a message to verify; investigate the daemon only if there is no reply for several minutes |
 | User receives duplicate replies | Usually the old (v1) claim-less `inbox-new` is still running, or a cron reply loop exists next to the hook: keep exactly one pipeline — the hook |
 | Hook woke you but `inbox-new` is empty | Messages are claimed and un-acked for under 10 minutes (a previous run is still working): they re-queue automatically; never edit the DB by hand |
 | Image/video send fails, missing `x-encrypted-param` | The upload didn't succeed (network or file issue): retry once; confirm video is mp4 and images are jpg/png |
